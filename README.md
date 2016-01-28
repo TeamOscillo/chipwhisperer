@@ -1,5 +1,8 @@
-ChipWhisperer® Project
+ChipWhisperer® Project with TeamOscillo
 =====================
+
+TeamOscillo is the study group for side-channel attack by using ChipWhisperer open project.
+During we thank ChipWhisperer to their effort, we want to try whole codes review.
 
 ChipWhisperer is an open source project dedicated to hardware security research. The main
 GIT repository is held on the Assembla Page at http://www.chipwhisperer.com , which also
