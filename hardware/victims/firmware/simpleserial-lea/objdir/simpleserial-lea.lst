@@ -1,0 +1,648 @@
+   1               		.file	"simpleserial-lea.c"
+   2               	__SP_H__ = 0x3e
+   3               	__SP_L__ = 0x3d
+   4               	__SREG__ = 0x3f
+   5               	__RAMPZ__ = 0x3b
+   6               	__CCP__ = 0x34
+   7               	__tmp_reg__ = 0
+   8               	__zero_reg__ = 1
+   9               		.text
+  10               	.Ltext0:
+  11               		.cfi_sections	.debug_frame
+  12               	.global	hex_decode
+  14               	hex_decode:
+  15               	.LFB11:
+  16               		.file 1 "simpleserial-lea.c"
+   1:simpleserial-lea.c **** /*
+   2:simpleserial-lea.c ****     This file is part of the ChipWhisperer Example Targets
+   3:simpleserial-lea.c ****     Copyright (C) 2012-2015 NewAE Technology Inc.
+   4:simpleserial-lea.c **** 
+   5:simpleserial-lea.c ****     This program is free software: you can redistribute it and/or modify
+   6:simpleserial-lea.c ****     it under the terms of the GNU General Public License as published by
+   7:simpleserial-lea.c ****     the Free Software Foundation, either version 3 of the License, or
+   8:simpleserial-lea.c ****     (at your option) any later version.
+   9:simpleserial-lea.c **** 
+  10:simpleserial-lea.c ****     This program is distributed in the hope that it will be useful,
+  11:simpleserial-lea.c ****     but WITHOUT ANY WARRANTY; without even the implied warranty of
+  12:simpleserial-lea.c ****     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  13:simpleserial-lea.c ****     GNU General Public License for more details.
+  14:simpleserial-lea.c **** 
+  15:simpleserial-lea.c ****     You should have received a copy of the GNU General Public License
+  16:simpleserial-lea.c ****     along with this program.  If not, see <http://www.gnu.org/licenses/>.
+  17:simpleserial-lea.c **** */
+  18:simpleserial-lea.c **** 
+  19:simpleserial-lea.c **** #include "hal.h"
+  20:simpleserial-lea.c **** #include <stdint.h>
+  21:simpleserial-lea.c **** #include <stdlib.h>
+  22:simpleserial-lea.c **** 
+  23:simpleserial-lea.c **** #include "lea-independant.h"
+  24:simpleserial-lea.c **** 
+  25:simpleserial-lea.c **** #define IDLE 0
+  26:simpleserial-lea.c **** #define KEY 1
+  27:simpleserial-lea.c **** #define PLAIN 2
+  28:simpleserial-lea.c **** 
+  29:simpleserial-lea.c **** char hex_lookup[16] = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', '
+  30:simpleserial-lea.c **** 
+  31:simpleserial-lea.c **** uint8_t* hex_decode(const char *in, int len,uint8_t *out)
+  32:simpleserial-lea.c **** {
+  17               		.loc 1 32 0
+  18               		.cfi_startproc
+  19               	.LVL0:
+  20 0000 CF93      		push r28
+  21               	.LCFI0:
+  22               		.cfi_def_cfa_offset 4
+  23               		.cfi_offset 28, -3
+  24 0002 DF93      		push r29
+  25               	.LCFI1:
+  26               		.cfi_def_cfa_offset 5
+  27               		.cfi_offset 29, -4
+  28               	/* prologue: function */
+  29               	/* frame size = 0 */
+  30               	/* stack size = 2 */
+  31               	.L__stack_usage = 2
+  32               	.LVL1:
+  33 0004 FA01      		movw r30,r20
+  33:simpleserial-lea.c ****         unsigned int i, t, hn, ln;
+  34:simpleserial-lea.c **** 
+  35:simpleserial-lea.c ****         for (t = 0,i = 0; i < len; i+=2,++t) {
+  34               		.loc 1 35 0
+  35 0006 20E0      		ldi r18,0
+  36 0008 30E0      		ldi r19,0
+  37               	.LVL2:
+  38               	.L2:
+  39               		.loc 1 35 0 is_stmt 0 discriminator 1
+  40 000a 2617      		cp r18,r22
+  41 000c 3707      		cpc r19,r23
+  42 000e 00F4      		brsh .L9
+  43 0010 DC01      		movw r26,r24
+  44 0012 A20F      		add r26,r18
+  45 0014 B31F      		adc r27,r19
+  36:simpleserial-lea.c **** 
+  37:simpleserial-lea.c ****                 hn = in[i] > '9' ? (in[i]|32) - 'a' + 10 : in[i] - '0';
+  46               		.loc 1 37 0 is_stmt 1
+  47 0016 CC91      		ld r28,X
+  48 0018 CA33      		cpi r28,lo8(58)
+  49 001a 00F0      		brlo .L3
+  50               		.loc 1 37 0 is_stmt 0 discriminator 1
+  51 001c C062      		ori r28,lo8(32)
+  52 001e D0E0      		ldi r29,0
+  53 0020 C755      		subi r28,87
+  54 0022 D109      		sbc r29,__zero_reg__
+  55 0024 00C0      		rjmp .L4
+  56               	.L3:
+  57               		.loc 1 37 0 discriminator 2
+  58 0026 D0E0      		ldi r29,0
+  59 0028 E097      		sbiw r28,48
+  60               	.L4:
+  38:simpleserial-lea.c ****                 ln = in[i+1] > '9' ? (in[i+1]|32) - 'a' + 10 : in[i+1] - '0';
+  61               		.loc 1 38 0 is_stmt 1 discriminator 3
+  62 002a 1196      		adiw r26,1
+  63 002c AC91      		ld r26,X
+  64 002e AA33      		cpi r26,lo8(58)
+  65 0030 00F0      		brlo .L5
+  66               		.loc 1 38 0 is_stmt 0 discriminator 1
+  67 0032 A062      		ori r26,lo8(32)
+  68 0034 B0E0      		ldi r27,0
+  69 0036 A755      		subi r26,87
+  70 0038 B109      		sbc r27,__zero_reg__
+  71 003a 00C0      		rjmp .L6
+  72               	.L5:
+  73               		.loc 1 38 0 discriminator 2
+  74 003c B0E0      		ldi r27,0
+  75 003e D097      		sbiw r26,48
+  76               	.L6:
+  39:simpleserial-lea.c ****                 out[t] = (hn << 4 ) | ln;
+  77               		.loc 1 39 0 is_stmt 1 discriminator 3
+  78 0040 C295      		swap r28
+  79 0042 C07F      		andi r28,lo8(-16)
+  80 0044 CA2B      		or r28,r26
+  81 0046 C193      		st Z+,r28
+  82               	.LVL3:
+  35:simpleserial-lea.c **** 
+  83               		.loc 1 35 0 discriminator 3
+  84 0048 2E5F      		subi r18,-2
+  85 004a 3F4F      		sbci r19,-1
+  86               	.LVL4:
+  87 004c 00C0      		rjmp .L2
+  88               	.L9:
+  40:simpleserial-lea.c ****         }
+  41:simpleserial-lea.c **** 
+  42:simpleserial-lea.c ****         return out;
+  43:simpleserial-lea.c **** }
+  89               		.loc 1 43 0
+  90 004e CA01      		movw r24,r20
+  91               	.LVL5:
+  92               	/* epilogue start */
+  93 0050 DF91      		pop r29
+  94 0052 CF91      		pop r28
+  95 0054 0895      		ret
+  96               		.cfi_endproc
+  97               	.LFE11:
+  99               	.global	hex_print
+ 101               	hex_print:
+ 102               	.LFB12:
+  44:simpleserial-lea.c **** 
+  45:simpleserial-lea.c **** void hex_print(const uint8_t * in, int len, char *out)
+  46:simpleserial-lea.c **** {
+ 103               		.loc 1 46 0
+ 104               		.cfi_startproc
+ 105               	.LVL6:
+ 106 0056 1F93      		push r17
+ 107               	.LCFI2:
+ 108               		.cfi_def_cfa_offset 4
+ 109               		.cfi_offset 17, -3
+ 110 0058 CF93      		push r28
+ 111               	.LCFI3:
+ 112               		.cfi_def_cfa_offset 5
+ 113               		.cfi_offset 28, -4
+ 114 005a DF93      		push r29
+ 115               	.LCFI4:
+ 116               		.cfi_def_cfa_offset 6
+ 117               		.cfi_offset 29, -5
+ 118               	/* prologue: function */
+ 119               	/* frame size = 0 */
+ 120               	/* stack size = 3 */
+ 121               	.L__stack_usage = 3
+ 122               	.LVL7:
+ 123 005c FA01      		movw r30,r20
+ 124 005e 3196      		adiw r30,1
+  47:simpleserial-lea.c **** 		unsigned int i,j;
+  48:simpleserial-lea.c **** 		j=0;
+  49:simpleserial-lea.c **** 		for (i=0; i < len; i++) {
+ 125               		.loc 1 49 0
+ 126 0060 20E0      		ldi r18,0
+ 127 0062 30E0      		ldi r19,0
+ 128               	.LVL8:
+ 129               	.L11:
+ 130               		.loc 1 49 0 is_stmt 0 discriminator 1
+ 131 0064 2617      		cp r18,r22
+ 132 0066 3707      		cpc r19,r23
+ 133 0068 01F0      		breq .L13
+ 134               	.LVL9:
+ 135 006a EC01      		movw r28,r24
+  50:simpleserial-lea.c **** 			out[j++] = hex_lookup[in[i] >> 4];
+ 136               		.loc 1 50 0 is_stmt 1 discriminator 2
+ 137 006c DC01      		movw r26,r24
+ 138 006e 1D91      		ld r17,X+
+ 139 0070 CD01      		movw r24,r26
+ 140 0072 1295      		swap r17
+ 141 0074 1F70      		andi r17,lo8(15)
+ 142 0076 A12F      		mov r26,r17
+ 143 0078 B0E0      		ldi r27,0
+ 144 007a A050      		subi r26,lo8(-(hex_lookup))
+ 145 007c B040      		sbci r27,hi8(-(hex_lookup))
+ 146 007e 1C91      		ld r17,X
+ 147 0080 DF01      		movw r26,r30
+ 148 0082 1197      		sbiw r26,1
+ 149 0084 1C93      		st X,r17
+ 150               	.LVL10:
+  51:simpleserial-lea.c **** 			out[j++] = hex_lookup[in[i] & 0x0F];			
+ 151               		.loc 1 51 0 discriminator 2
+ 152 0086 A881      		ld r26,Y
+ 153 0088 AF70      		andi r26,lo8(15)
+ 154 008a B0E0      		ldi r27,0
+ 155 008c A050      		subi r26,lo8(-(hex_lookup))
+ 156 008e B040      		sbci r27,hi8(-(hex_lookup))
+ 157 0090 AC91      		ld r26,X
+ 158 0092 A083      		st Z,r26
+  49:simpleserial-lea.c **** 			out[j++] = hex_lookup[in[i] >> 4];
+ 159               		.loc 1 49 0 discriminator 2
+ 160 0094 2F5F      		subi r18,-1
+ 161 0096 3F4F      		sbci r19,-1
+ 162               	.LVL11:
+ 163 0098 3296      		adiw r30,2
+ 164               	.LVL12:
+ 165 009a 00C0      		rjmp .L11
+ 166               	.L13:
+  52:simpleserial-lea.c **** 		}
+  53:simpleserial-lea.c **** 		
+  54:simpleserial-lea.c **** 		out[j] = 0;
+ 167               		.loc 1 54 0
+ 168 009c F901      		movw r30,r18
+ 169               	.LVL13:
+ 170 009e EE0F      		lsl r30
+ 171 00a0 FF1F      		rol r31
+ 172 00a2 E40F      		add r30,r20
+ 173 00a4 F51F      		adc r31,r21
+ 174 00a6 1082      		st Z,__zero_reg__
+ 175               	/* epilogue start */
+  55:simpleserial-lea.c **** }
+ 176               		.loc 1 55 0
+ 177 00a8 DF91      		pop r29
+ 178 00aa CF91      		pop r28
+ 179 00ac 1F91      		pop r17
+ 180 00ae 0895      		ret
+ 181               		.cfi_endproc
+ 182               	.LFE12:
+ 184               		.section	.text.startup,"ax",@progbits
+ 185               	.global	main
+ 187               	main:
+ 188               	.LFB13:
+  56:simpleserial-lea.c **** 
+  57:simpleserial-lea.c **** #define BUFLEN KEY_LENGTH*4
+  58:simpleserial-lea.c **** 
+  59:simpleserial-lea.c **** uint8_t memory[BUFLEN];
+  60:simpleserial-lea.c **** char asciibuf[BUFLEN];
+  61:simpleserial-lea.c **** uint8_t pt[16];
+  62:simpleserial-lea.c **** //Default key
+  63:simpleserial-lea.c **** uint8_t tmp[KEY_LENGTH] = {DEFAULT_KEY};
+  64:simpleserial-lea.c **** 
+  65:simpleserial-lea.c **** int main
+  66:simpleserial-lea.c **** 	(
+  67:simpleserial-lea.c **** 	void
+  68:simpleserial-lea.c **** 	)
+  69:simpleserial-lea.c **** 	{
+ 189               		.loc 1 69 0
+ 190               		.cfi_startproc
+ 191               	/* prologue: function */
+ 192               	/* frame size = 0 */
+ 193               	/* stack size = 0 */
+ 194               	.L__stack_usage = 0
+  70:simpleserial-lea.c ****     platform_init();
+ 195               		.loc 1 70 0
+ 196 0000 0E94 0000 		call platform_init
+ 197               	.LVL14:
+  71:simpleserial-lea.c **** 	init_uart();	
+ 198               		.loc 1 71 0
+ 199 0004 0E94 0000 		call init_uart0
+ 200               	.LVL15:
+  72:simpleserial-lea.c **** 	trigger_setup();
+ 201               		.loc 1 72 0
+ 202 0008 81E0      		ldi r24,lo8(1)
+ 203 000a 8093 0106 		sts 1537,r24
+ 204               	.LVL16:
+  73:simpleserial-lea.c **** 	
+  74:simpleserial-lea.c ****  	/* Uncomment this to get a HELLO message for debug */
+  75:simpleserial-lea.c **** 	/*
+  76:simpleserial-lea.c **** 	putch('h');
+  77:simpleserial-lea.c **** 	putch('e');
+  78:simpleserial-lea.c **** 	putch('l');
+  79:simpleserial-lea.c **** 	putch('l');
+  80:simpleserial-lea.c **** 	putch('o');
+  81:simpleserial-lea.c **** 	putch('\n');
+  82:simpleserial-lea.c **** 	*/
+  83:simpleserial-lea.c **** 			
+  84:simpleserial-lea.c **** 	/* Super-Crappy Protocol works like this:
+  85:simpleserial-lea.c **** 	
+  86:simpleserial-lea.c **** 	Send kKEY
+  87:simpleserial-lea.c **** 	Send pPLAINTEXT
+  88:simpleserial-lea.c **** 	*** Encryption Occurs ***
+  89:simpleserial-lea.c **** 	receive rRESPONSE
+  90:simpleserial-lea.c **** 	
+  91:simpleserial-lea.c **** 	e.g.:
+  92:simpleserial-lea.c **** 	
+  93:simpleserial-lea.c ****     kE8E9EAEBEDEEEFF0F2F3F4F5F7F8F9FA\n
+  94:simpleserial-lea.c **** 	p014BAF2278A69D331D5180103643E99A\n
+  95:simpleserial-lea.c **** 	r6743C3D1519AB4F2CD9A78AB09A511BD\n
+  96:simpleserial-lea.c ****     */
+  97:simpleserial-lea.c **** 		
+  98:simpleserial-lea.c **** 	char c;
+  99:simpleserial-lea.c **** 	int ptr = 0;
+ 100:simpleserial-lea.c ****     
+ 101:simpleserial-lea.c **** 	//Initial key
+ 102:simpleserial-lea.c **** 	lea_indep_init();
+ 205               		.loc 1 102 0
+ 206 000e 0E94 0000 		call lea_indep_init
+ 207               	.LVL17:
+ 103:simpleserial-lea.c **** 	lea_indep_key(tmp);
+ 208               		.loc 1 103 0
+ 209 0012 80E0      		ldi r24,lo8(tmp)
+ 210 0014 90E0      		ldi r25,hi8(tmp)
+ 211 0016 0E94 0000 		call lea_indep_key
+ 212               	.LVL18:
+ 104:simpleserial-lea.c **** 
+ 105:simpleserial-lea.c **** 	char state = 0;
+ 213               		.loc 1 105 0
+ 214 001a 10E0      		ldi r17,0
+  99:simpleserial-lea.c ****     
+ 215               		.loc 1 99 0
+ 216 001c C0E0      		ldi r28,0
+ 217 001e D0E0      		ldi r29,0
+ 106:simpleserial-lea.c **** 	 
+ 107:simpleserial-lea.c **** 	while(1){
+ 108:simpleserial-lea.c **** 	
+ 109:simpleserial-lea.c **** 		c = getch();
+ 110:simpleserial-lea.c **** 		
+ 111:simpleserial-lea.c **** 		if (c == 'x') {
+ 112:simpleserial-lea.c **** 			ptr = 0;
+ 113:simpleserial-lea.c **** 			state = IDLE;
+ 114:simpleserial-lea.c **** 			continue;		
+ 115:simpleserial-lea.c **** 		}
+ 116:simpleserial-lea.c **** 		
+ 117:simpleserial-lea.c **** 		if (c == 'k') {
+ 118:simpleserial-lea.c **** 			ptr = 0;
+ 119:simpleserial-lea.c **** 			state = KEY;			
+ 120:simpleserial-lea.c **** 			continue;
+ 121:simpleserial-lea.c **** 		}
+ 122:simpleserial-lea.c **** 		
+ 123:simpleserial-lea.c **** 		else if (c == 'p') {
+ 124:simpleserial-lea.c **** 			ptr = 0;
+ 125:simpleserial-lea.c **** 			state = PLAIN;
+ 126:simpleserial-lea.c **** 			continue;
+ 127:simpleserial-lea.c **** 		}
+ 128:simpleserial-lea.c **** 		
+ 129:simpleserial-lea.c **** 		
+ 130:simpleserial-lea.c **** 		else if (state == KEY) {
+ 131:simpleserial-lea.c **** 			if ((c == '\n') || (c == '\r')) {
+ 132:simpleserial-lea.c **** 				asciibuf[ptr] = 0;
+ 133:simpleserial-lea.c **** 				hex_decode(asciibuf, ptr, tmp);
+ 134:simpleserial-lea.c **** 				lea_indep_key(tmp);
+ 135:simpleserial-lea.c **** 				state = IDLE;
+ 136:simpleserial-lea.c **** 			} else {
+ 137:simpleserial-lea.c **** 				asciibuf[ptr++] = c;
+ 138:simpleserial-lea.c **** 			}
+ 139:simpleserial-lea.c **** 		}
+ 140:simpleserial-lea.c **** 		
+ 141:simpleserial-lea.c **** 		else if (state == PLAIN) {
+ 142:simpleserial-lea.c **** 			if ((c == '\n') || (c == '\r')) {
+ 143:simpleserial-lea.c **** 				asciibuf[ptr] = 0;
+ 144:simpleserial-lea.c **** 				hex_decode(asciibuf, ptr, pt);
+ 145:simpleserial-lea.c **** 
+ 146:simpleserial-lea.c **** 				/* Do Encryption */					
+ 147:simpleserial-lea.c **** 				trigger_high();
+ 218               		.loc 1 147 0
+ 219 0020 FF24      		clr r15
+ 220 0022 F394      		inc r15
+ 221               	.LVL19:
+ 222               	.L15:
+ 109:simpleserial-lea.c **** 		
+ 223               		.loc 1 109 0
+ 224 0024 0E94 0000 		call input_ch_0
+ 225               	.LVL20:
+ 111:simpleserial-lea.c **** 			ptr = 0;
+ 226               		.loc 1 111 0
+ 227 0028 8837      		cpi r24,lo8(120)
+ 228 002a 01F4      		brne .L36
+ 113:simpleserial-lea.c **** 			continue;		
+ 229               		.loc 1 113 0
+ 230 002c 10E0      		ldi r17,0
+ 231               	.LVL21:
+ 232 002e 00C0      		rjmp .L35
+ 233               	.LVL22:
+ 234               	.L36:
+ 117:simpleserial-lea.c **** 			ptr = 0;
+ 235               		.loc 1 117 0
+ 236 0030 8B36      		cpi r24,lo8(107)
+ 237 0032 01F4      		brne .L37
+ 119:simpleserial-lea.c **** 			continue;
+ 238               		.loc 1 119 0
+ 239 0034 11E0      		ldi r17,lo8(1)
+ 240               	.LVL23:
+ 241               	.L35:
+ 118:simpleserial-lea.c **** 			state = KEY;			
+ 242               		.loc 1 118 0
+ 243 0036 C0E0      		ldi r28,0
+ 244 0038 D0E0      		ldi r29,0
+ 245               	.LVL24:
+ 246 003a 00C0      		rjmp .L15
+ 247               	.LVL25:
+ 248               	.L37:
+ 123:simpleserial-lea.c **** 			ptr = 0;
+ 249               		.loc 1 123 0
+ 250 003c 8037      		cpi r24,lo8(112)
+ 251 003e 01F4      		brne .L38
+ 125:simpleserial-lea.c **** 			continue;
+ 252               		.loc 1 125 0
+ 253 0040 12E0      		ldi r17,lo8(2)
+ 254               	.LVL26:
+ 255 0042 00C0      		rjmp .L35
+ 256               	.LVL27:
+ 257               	.L38:
+ 130:simpleserial-lea.c **** 			if ((c == '\n') || (c == '\r')) {
+ 258               		.loc 1 130 0
+ 259 0044 1130      		cpi r17,lo8(1)
+ 260 0046 01F4      		brne .L17
+ 261 0048 FE01      		movw r30,r28
+ 262 004a E050      		subi r30,lo8(-(asciibuf))
+ 263 004c F040      		sbci r31,hi8(-(asciibuf))
+ 131:simpleserial-lea.c **** 				asciibuf[ptr] = 0;
+ 264               		.loc 1 131 0
+ 265 004e 8A30      		cpi r24,lo8(10)
+ 266 0050 01F0      		breq .L18
+ 131:simpleserial-lea.c **** 				asciibuf[ptr] = 0;
+ 267               		.loc 1 131 0 is_stmt 0 discriminator 1
+ 268 0052 8D30      		cpi r24,lo8(13)
+ 269 0054 01F0      		breq .+2
+ 270 0056 00C0      		rjmp .L34
+ 271               	.L18:
+ 132:simpleserial-lea.c **** 				hex_decode(asciibuf, ptr, tmp);
+ 272               		.loc 1 132 0 is_stmt 1
+ 273 0058 1082      		st Z,__zero_reg__
+ 133:simpleserial-lea.c **** 				lea_indep_key(tmp);
+ 274               		.loc 1 133 0
+ 275 005a 40E0      		ldi r20,lo8(tmp)
+ 276 005c 50E0      		ldi r21,hi8(tmp)
+ 277 005e BE01      		movw r22,r28
+ 278 0060 80E0      		ldi r24,lo8(asciibuf)
+ 279 0062 90E0      		ldi r25,hi8(asciibuf)
+ 280               	.LVL28:
+ 281 0064 0E94 0000 		call hex_decode
+ 282               	.LVL29:
+ 134:simpleserial-lea.c **** 				state = IDLE;
+ 283               		.loc 1 134 0
+ 284 0068 80E0      		ldi r24,lo8(tmp)
+ 285 006a 90E0      		ldi r25,hi8(tmp)
+ 286 006c 0E94 0000 		call lea_indep_key
+ 287               	.LVL30:
+ 288               	.L27:
+ 148:simpleserial-lea.c **** 				
+ 149:simpleserial-lea.c **** 				//uint32_t* mk =( uint32_t*)pt;
+ 150:simpleserial-lea.c **** 				//pt[0] = mk[0];
+ 151:simpleserial-lea.c **** 				lea_indep_enc(pt); /* encrypting the data block */
+ 152:simpleserial-lea.c **** 				trigger_low();
+ 153:simpleserial-lea.c **** 				               
+ 154:simpleserial-lea.c **** 				/* Print Results */
+ 155:simpleserial-lea.c **** 				hex_print(pt, 16, asciibuf);
+ 156:simpleserial-lea.c **** 				
+ 157:simpleserial-lea.c **** 				putch('r');
+ 158:simpleserial-lea.c **** 				for(int i = 0; i < 32; i++){
+ 159:simpleserial-lea.c **** 					putch(asciibuf[i]);
+ 160:simpleserial-lea.c **** 				}
+ 161:simpleserial-lea.c **** 				putch('\n');
+ 162:simpleserial-lea.c **** 				
+ 163:simpleserial-lea.c **** 				state = IDLE;
+ 164:simpleserial-lea.c **** 			} else {
+ 165:simpleserial-lea.c ****                 if (ptr >= BUFLEN){
+ 166:simpleserial-lea.c ****                     state = IDLE;
+ 289               		.loc 1 166 0
+ 290 0070 10E0      		ldi r17,0
+ 291 0072 00C0      		rjmp .L15
+ 292               	.LVL31:
+ 293               	.L17:
+ 141:simpleserial-lea.c **** 			if ((c == '\n') || (c == '\r')) {
+ 294               		.loc 1 141 0
+ 295 0074 1230      		cpi r17,lo8(2)
+ 296 0076 01F4      		brne .L15
+ 142:simpleserial-lea.c **** 				asciibuf[ptr] = 0;
+ 297               		.loc 1 142 0
+ 298 0078 8A30      		cpi r24,lo8(10)
+ 299 007a 01F0      		breq .L20
+ 142:simpleserial-lea.c **** 				asciibuf[ptr] = 0;
+ 300               		.loc 1 142 0 is_stmt 0 discriminator 1
+ 301 007c 8D30      		cpi r24,lo8(13)
+ 302 007e 01F4      		brne .L21
+ 303               	.L20:
+ 143:simpleserial-lea.c **** 				hex_decode(asciibuf, ptr, pt);
+ 304               		.loc 1 143 0 is_stmt 1
+ 305 0080 FE01      		movw r30,r28
+ 306 0082 E050      		subi r30,lo8(-(asciibuf))
+ 307 0084 F040      		sbci r31,hi8(-(asciibuf))
+ 308 0086 1082      		st Z,__zero_reg__
+ 144:simpleserial-lea.c **** 
+ 309               		.loc 1 144 0
+ 310 0088 40E0      		ldi r20,lo8(pt)
+ 311 008a 50E0      		ldi r21,hi8(pt)
+ 312 008c BE01      		movw r22,r28
+ 313 008e 80E0      		ldi r24,lo8(asciibuf)
+ 314 0090 90E0      		ldi r25,hi8(asciibuf)
+ 315               	.LVL32:
+ 316 0092 0E94 0000 		call hex_decode
+ 317               	.LVL33:
+ 147:simpleserial-lea.c **** 				
+ 318               		.loc 1 147 0
+ 319 0096 F092 0506 		sts 1541,r15
+ 151:simpleserial-lea.c **** 				trigger_low();
+ 320               		.loc 1 151 0
+ 321 009a 80E0      		ldi r24,lo8(pt)
+ 322 009c 90E0      		ldi r25,hi8(pt)
+ 323 009e 0E94 0000 		call lea_indep_enc
+ 324               	.LVL34:
+ 152:simpleserial-lea.c **** 				               
+ 325               		.loc 1 152 0
+ 326 00a2 F092 0606 		sts 1542,r15
+ 155:simpleserial-lea.c **** 				
+ 327               		.loc 1 155 0
+ 328 00a6 40E0      		ldi r20,lo8(asciibuf)
+ 329 00a8 50E0      		ldi r21,hi8(asciibuf)
+ 330 00aa 60E1      		ldi r22,lo8(16)
+ 331 00ac 70E0      		ldi r23,0
+ 332 00ae 80E0      		ldi r24,lo8(pt)
+ 333 00b0 90E0      		ldi r25,hi8(pt)
+ 334 00b2 0E94 0000 		call hex_print
+ 335               	.LVL35:
+ 157:simpleserial-lea.c **** 				for(int i = 0; i < 32; i++){
+ 336               		.loc 1 157 0
+ 337 00b6 82E7      		ldi r24,lo8(114)
+ 338 00b8 0E94 0000 		call output_ch_0
+ 339               	.LVL36:
+ 340 00bc 00E0      		ldi r16,lo8(asciibuf)
+ 341 00be 10E0      		ldi r17,hi8(asciibuf)
+ 342               	.LVL37:
+ 343               	.L23:
+ 344               	.LBB2:
+ 159:simpleserial-lea.c **** 				}
+ 345               		.loc 1 159 0 discriminator 2
+ 346 00c0 F801      		movw r30,r16
+ 347 00c2 8191      		ld r24,Z+
+ 348 00c4 8F01      		movw r16,r30
+ 349               	.LVL38:
+ 350 00c6 0E94 0000 		call output_ch_0
+ 351               	.LVL39:
+ 158:simpleserial-lea.c **** 					putch(asciibuf[i]);
+ 352               		.loc 1 158 0 discriminator 2
+ 353 00ca F0E0      		ldi r31,hi8(asciibuf+32)
+ 354 00cc 0030      		cpi r16,lo8(asciibuf+32)
+ 355 00ce 1F07      		cpc r17,r31
+ 356 00d0 01F4      		brne .L23
+ 357               	.LBE2:
+ 161:simpleserial-lea.c **** 				
+ 358               		.loc 1 161 0
+ 359 00d2 8AE0      		ldi r24,lo8(10)
+ 360 00d4 0E94 0000 		call output_ch_0
+ 361               	.LVL40:
+ 362 00d8 00C0      		rjmp .L27
+ 363               	.LVL41:
+ 364               	.L21:
+ 165:simpleserial-lea.c ****                     state = IDLE;
+ 365               		.loc 1 165 0
+ 366 00da C034      		cpi r28,64
+ 367 00dc D105      		cpc r29,__zero_reg__
+ 368 00de 04F4      		brge .L27
+ 369               	.LVL42:
+ 167:simpleserial-lea.c ****                 } else {
+ 168:simpleserial-lea.c ****                     asciibuf[ptr++] = c;
+ 370               		.loc 1 168 0
+ 371 00e0 FE01      		movw r30,r28
+ 372 00e2 E050      		subi r30,lo8(-(asciibuf))
+ 373 00e4 F040      		sbci r31,hi8(-(asciibuf))
+ 374               	.LVL43:
+ 375               	.L34:
+ 376 00e6 8083      		st Z,r24
+ 377 00e8 2196      		adiw r28,1
+ 378 00ea 00C0      		rjmp .L15
+ 379               		.cfi_endproc
+ 380               	.LFE13:
+ 382               	.global	tmp
+ 383               		.data
+ 386               	tmp:
+ 387 0000 2B        		.byte	43
+ 388 0001 7E        		.byte	126
+ 389 0002 15        		.byte	21
+ 390 0003 16        		.byte	22
+ 391 0004 28        		.byte	40
+ 392 0005 AE        		.byte	-82
+ 393 0006 D2        		.byte	-46
+ 394 0007 A6        		.byte	-90
+ 395 0008 AB        		.byte	-85
+ 396 0009 F7        		.byte	-9
+ 397 000a 15        		.byte	21
+ 398 000b 88        		.byte	-120
+ 399 000c 09        		.byte	9
+ 400 000d CF        		.byte	-49
+ 401 000e 4F        		.byte	79
+ 402 000f 3C        		.byte	60
+ 403               		.comm	pt,16,1
+ 404               		.comm	asciibuf,64,1
+ 405               		.comm	memory,64,1
+ 406               	.global	hex_lookup
+ 409               	hex_lookup:
+ 410 0010 30        		.byte	48
+ 411 0011 31        		.byte	49
+ 412 0012 32        		.byte	50
+ 413 0013 33        		.byte	51
+ 414 0014 34        		.byte	52
+ 415 0015 35        		.byte	53
+ 416 0016 36        		.byte	54
+ 417 0017 37        		.byte	55
+ 418 0018 38        		.byte	56
+ 419 0019 39        		.byte	57
+ 420 001a 41        		.byte	65
+ 421 001b 42        		.byte	66
+ 422 001c 43        		.byte	67
+ 423 001d 44        		.byte	68
+ 424 001e 45        		.byte	69
+ 425 001f 46        		.byte	70
+ 426               		.text
+ 427               	.Letext0:
+ 428               		.file 2 "/usr/lib/avr/include/stdint.h"
+ 429               		.file 3 "/usr/lib/avr/include/avr/iox128d3.h"
+ 430               		.file 4 "../hal/xmega/uart.h"
+ 431               		.file 5 "../crypto/lea-independant.h"
+DEFINED SYMBOLS
+                            *ABS*:00000000 simpleserial-lea.c
+     /tmp/ccaWNIf8.s:2      *ABS*:0000003e __SP_H__
+     /tmp/ccaWNIf8.s:3      *ABS*:0000003d __SP_L__
+     /tmp/ccaWNIf8.s:4      *ABS*:0000003f __SREG__
+     /tmp/ccaWNIf8.s:5      *ABS*:0000003b __RAMPZ__
+     /tmp/ccaWNIf8.s:6      *ABS*:00000034 __CCP__
+     /tmp/ccaWNIf8.s:7      *ABS*:00000000 __tmp_reg__
+     /tmp/ccaWNIf8.s:8      *ABS*:00000001 __zero_reg__
+     /tmp/ccaWNIf8.s:14     .text:00000000 hex_decode
+     /tmp/ccaWNIf8.s:101    .text:00000056 hex_print
+     /tmp/ccaWNIf8.s:409    .data:00000010 hex_lookup
+     /tmp/ccaWNIf8.s:187    .text.startup:00000000 main
+     /tmp/ccaWNIf8.s:386    .data:00000000 tmp
+                            *COM*:00000040 asciibuf
+                            *COM*:00000010 pt
+                            *COM*:00000040 memory
+
+UNDEFINED SYMBOLS
+platform_init
+init_uart0
+lea_indep_init
+lea_indep_key
+input_ch_0
+lea_indep_enc
+output_ch_0
+__do_copy_data
+__do_clear_bss

@@ -1,0 +1,123 @@
+   1               		.file	"lea-independant.c"
+   2               	__SP_H__ = 0x3e
+   3               	__SP_L__ = 0x3d
+   4               	__SREG__ = 0x3f
+   5               	__RAMPZ__ = 0x3b
+   6               	__CCP__ = 0x34
+   7               	__tmp_reg__ = 0
+   8               	__zero_reg__ = 1
+   9               		.text
+  10               	.Ltext0:
+  11               		.cfi_sections	.debug_frame
+  12               	.global	lea_indep_init
+  14               	lea_indep_init:
+  15               	.LFB0:
+  16               		.file 1 "../crypto/lea-independant.c"
+   1:../crypto/lea-independant.c **** /*
+   2:../crypto/lea-independant.c ****     This file is part of the leaExplorer Example Targets
+   3:../crypto/lea-independant.c ****     Copyright (C) 2012 Colin O'Flynn <coflynn@newae.com>
+   4:../crypto/lea-independant.c **** 
+   5:../crypto/lea-independant.c ****     This program is free software: you can redistribute it and/or modify
+   6:../crypto/lea-independant.c ****     it under the terms of the GNU General Public License as published by
+   7:../crypto/lea-independant.c ****     the Free Software Foundation, either version 3 of the License, or
+   8:../crypto/lea-independant.c ****     (at your option) any later version.
+   9:../crypto/lea-independant.c **** 
+  10:../crypto/lea-independant.c ****     This program is distributed in the hope that it will be useful,
+  11:../crypto/lea-independant.c ****     but WITHOUT ANY WARRANTY; without even the implied warranty of
+  12:../crypto/lea-independant.c ****     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  13:../crypto/lea-independant.c ****     GNU General Public License for more details.
+  14:../crypto/lea-independant.c **** 
+  15:../crypto/lea-independant.c ****     You should have received a copy of the GNU General Public License
+  16:../crypto/lea-independant.c ****     along with this program.  If not, see <http://www.gnu.org/licenses/>.
+  17:../crypto/lea-independant.c **** */
+  18:../crypto/lea-independant.c **** 
+  19:../crypto/lea-independant.c **** #include "lea-independant.h"
+  20:../crypto/lea-independant.c **** 
+  21:../crypto/lea-independant.c **** #ifdef AVRCRYPTOLIB
+  22:../crypto/lea-independant.c **** #include "lea128_enc.h"
+  23:../crypto/lea-independant.c **** #include "lea_keyschedule.h"
+  24:../crypto/lea-independant.c **** 
+  25:../crypto/lea-independant.c **** LEA_KEY ctx;
+  26:../crypto/lea-independant.c **** 
+  27:../crypto/lea-independant.c **** void lea_indep_init(void)
+  28:../crypto/lea-independant.c **** {
+  17               		.loc 1 28 0
+  18               		.cfi_startproc
+  19               	/* prologue: function */
+  20               	/* frame size = 0 */
+  21               	/* stack size = 0 */
+  22               	.L__stack_usage = 0
+  23 0000 0895      		ret
+  24               		.cfi_endproc
+  25               	.LFE0:
+  27               	.global	lea_indep_key
+  29               	lea_indep_key:
+  30               	.LFB1:
+  29:../crypto/lea-independant.c **** 	;
+  30:../crypto/lea-independant.c **** }
+  31:../crypto/lea-independant.c **** 
+  32:../crypto/lea-independant.c **** void lea_indep_key(uint8_t * key)
+  33:../crypto/lea-independant.c **** {
+  31               		.loc 1 33 0
+  32               		.cfi_startproc
+  33               	.LVL0:
+  34               	/* prologue: function */
+  35               	/* frame size = 0 */
+  36               	/* stack size = 0 */
+  37               	.L__stack_usage = 0
+  34:../crypto/lea-independant.c **** 	lea128_init(&ctx,key);
+  38               		.loc 1 34 0
+  39 0002 BC01      		movw r22,r24
+  40 0004 80E0      		ldi r24,lo8(ctx)
+  41 0006 90E0      		ldi r25,hi8(ctx)
+  42               	.LVL1:
+  43 0008 0C94 0000 		jmp lea128_init
+  44               	.LVL2:
+  45               		.cfi_endproc
+  46               	.LFE1:
+  48               	.global	lea_indep_enc
+  50               	lea_indep_enc:
+  51               	.LFB2:
+  35:../crypto/lea-independant.c **** }
+  36:../crypto/lea-independant.c **** 
+  37:../crypto/lea-independant.c **** void lea_indep_enc(uint8_t * pt)
+  38:../crypto/lea-independant.c **** {
+  52               		.loc 1 38 0
+  53               		.cfi_startproc
+  54               	.LVL3:
+  55               	/* prologue: function */
+  56               	/* frame size = 0 */
+  57               	/* stack size = 0 */
+  58               	.L__stack_usage = 0
+  39:../crypto/lea-independant.c **** 	lea128_enc(pt, &ctx); /* encrypting the data block */
+  59               		.loc 1 39 0
+  60 000c 60E0      		ldi r22,lo8(ctx)
+  61 000e 70E0      		ldi r23,hi8(ctx)
+  62 0010 0C94 0000 		jmp lea128_enc
+  63               	.LVL4:
+  64               		.cfi_endproc
+  65               	.LFE2:
+  67               		.comm	ctx,769,1
+  68               	.Letext0:
+  69               		.file 2 "/usr/lib/avr/include/stdint.h"
+  70               		.file 3 "../crypto/avrcryptolib//lea/lea_types.h"
+  71               		.file 4 "../crypto/avrcryptolib//lea/lea_keyschedule.h"
+  72               		.file 5 "../crypto/avrcryptolib//lea/lea128_enc.h"
+DEFINED SYMBOLS
+                            *ABS*:00000000 lea-independant.c
+     /tmp/ccTQkTRf.s:2      *ABS*:0000003e __SP_H__
+     /tmp/ccTQkTRf.s:3      *ABS*:0000003d __SP_L__
+     /tmp/ccTQkTRf.s:4      *ABS*:0000003f __SREG__
+     /tmp/ccTQkTRf.s:5      *ABS*:0000003b __RAMPZ__
+     /tmp/ccTQkTRf.s:6      *ABS*:00000034 __CCP__
+     /tmp/ccTQkTRf.s:7      *ABS*:00000000 __tmp_reg__
+     /tmp/ccTQkTRf.s:8      *ABS*:00000001 __zero_reg__
+     /tmp/ccTQkTRf.s:14     .text:00000000 lea_indep_init
+     /tmp/ccTQkTRf.s:29     .text:00000002 lea_indep_key
+                            *COM*:00000301 ctx
+     /tmp/ccTQkTRf.s:50     .text:0000000c lea_indep_enc
+
+UNDEFINED SYMBOLS
+lea128_init
+lea128_enc
+__do_clear_bss
