@@ -48,9 +48,9 @@ void hex_print(const uint8_t * in, int len, char *out)
 		j=0;
 		for (i=0; i < len; i++) {
 			out[j++] = hex_lookup[in[i] >> 4];
-			out[j++] = hex_lookup[in[i] & 0x0F];			
+			out[j++] = hex_lookup[in[i] & 0x0F];
 		}
-		
+
 		out[j] = 0;
 }
 
@@ -68,9 +68,9 @@ int main
 	)
 	{
     platform_init();
-	init_uart();	
+	init_uart();
 	trigger_setup();
-	
+
  	/* Uncomment this to get a HELLO message for debug */
 	/*
 	putch('h');
@@ -80,53 +80,53 @@ int main
 	putch('o');
 	putch('\n');
 	*/
-			
+
 	/* Super-Crappy Protocol works like this:
-	
+
 	Send kKEY
 	Send pPLAINTEXT
 	*** Encryption Occurs ***
 	receive rRESPONSE
-	
+
 	e.g.:
-	
+
     kE8E9EAEBEDEEEFF0F2F3F4F5F7F8F9FA\n
 	p014BAF2278A69D331D5180103643E99A\n
 	r6743C3D1519AB4F2CD9A78AB09A511BD\n
     */
-		
+
 	char c;
 	int ptr = 0;
-    
+
 	//Initial key
 	lea_indep_init();
 	lea_indep_key(tmp);
 
 	char state = 0;
-	 
+
 	while(1){
-	
+
 		c = getch();
-		
+
 		if (c == 'x') {
 			ptr = 0;
 			state = IDLE;
-			continue;		
-		}
-		
-		if (c == 'k') {
-			ptr = 0;
-			state = KEY;			
 			continue;
 		}
-		
+
+		if (c == 'k') {
+			ptr = 0;
+			state = KEY;
+			continue;
+		}
+
 		else if (c == 'p') {
 			ptr = 0;
 			state = PLAIN;
 			continue;
 		}
-		
-		
+
+
 		else if (state == KEY) {
 			if ((c == '\n') || (c == '\r')) {
 				asciibuf[ptr] = 0;
@@ -137,27 +137,26 @@ int main
 				asciibuf[ptr++] = c;
 			}
 		}
-		
+
 		else if (state == PLAIN) {
 			if ((c == '\n') || (c == '\r')) {
 				asciibuf[ptr] = 0;
 				hex_decode(asciibuf, ptr, pt);
 
-				/* Do Encryption */					
+				/* Do Encryption */
 				trigger_high();
-				
 				lea_indep_enc(pt); /* encrypting the data block */
 				trigger_low();
-				               
+
 				/* Print Results */
 				hex_print(pt, 16, asciibuf);
-				
+
 				putch('r');
 				for(int i = 0; i < 32; i++){
 					putch(asciibuf[i]);
 				}
 				putch('\n');
-				
+
 				state = IDLE;
 			} else {
                 if (ptr >= BUFLEN){
@@ -168,8 +167,6 @@ int main
 			}
 		}
 	}
-		
+
 	return 1;
 	}
-	
-	
