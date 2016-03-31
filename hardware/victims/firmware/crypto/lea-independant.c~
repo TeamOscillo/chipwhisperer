@@ -1,18 +1,20 @@
 /*
- This file is part of the  LEAExplorer Example Targets
- Copyright TeamOscillo (qhdwls202@naver).
- 
- This program is free software: you can redistribute it and/or modify
- it under the terms of the GNU General Public License as published by
- the Free Software Foundation, either version 3 of the License, or
- (at your option) any later version.
+    This file is part of the leaExplorer Example Targets
+    Copyright (C) 2012 Colin O'Flynn <coflynn@newae.com>
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-/**
- * \file     lea-independant.c
- * \email    qhdwls202@naver.com
- * \author   TeamOscillo
- * \date     2016-03-14
- **/
 
 #include "lea-independant.h"
 
@@ -20,7 +22,7 @@
 #include "lea128_enc.h"
 #include "lea_keyschedule.h"
 
-LEA_KEY ctx; /* lea round key set */
+LEA_KEY ctx; // lea round key set
 
 void lea_indep_init(void)
 {
@@ -29,12 +31,12 @@ void lea_indep_init(void)
 
 void lea_indep_key(uint8_t * key)
 {
-	lea128_init(&ctx,key); /* ctx : round key , key: real_key */
+	lea128_init(&ctx,key); // ctx : round key , key: real_key
 }
-/* encrypting the data block */
+
 void lea_indep_enc(uint8_t * pt)
 {
-	lea128_enc(pt, &ctx);  /* pt : plain text */
+	lea128_enc(pt, &ctx); /* encrypting the data block */
 }
 
 #elif defined(SIMPLElea)

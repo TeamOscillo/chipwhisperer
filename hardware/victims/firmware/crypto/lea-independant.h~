@@ -13,7 +13,6 @@
  * \author   TeamOscillo
  * \date     2016-03-14
  **/
-
 #include "lea-independant.h"
 
 #ifdef AVRCRYPTOLIB
@@ -31,10 +30,11 @@ void lea_indep_key(uint8_t * key)
 {
 	lea128_init(&ctx,key); /* ctx : round key , key: real_key */
 }
-/* encrypting the data block */
+
+/*encrypting the data block */
 void lea_indep_enc(uint8_t * pt)
 {
-	lea128_enc(pt, &ctx);  /* pt : plain text */
+	lea128_enc(pt, &ctx); /* pt : plain text */
 }
 
 #elif defined(SIMPLElea)
@@ -97,5 +97,6 @@ void lea_indep_enc(uint8_t * pt)
 #error "No Crypto Lib Defined?"
 
 #endif
+
 
 
