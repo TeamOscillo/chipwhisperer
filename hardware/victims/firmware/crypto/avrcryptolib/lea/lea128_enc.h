@@ -1,7 +1,7 @@
 /* lea128_enc.h */
 /*
     This file is part of the AVR-Crypto-Lib.
-    Copyright 2016 TeamOscillo (qhdwls202@naver).
+    Copyright 2016 TeamOscillo (qhdwls202@naver)
  
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
