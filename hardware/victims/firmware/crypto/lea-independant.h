@@ -1,6 +1,6 @@
 /*
     This file is part of the ChipWhisperer Example Targets
-    Copyright (C) 2016 TeamOscillo (qhdwls202@naver)
+    Copyright (C) 2016  TeamOscillo (qhdwls202@naver)
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
