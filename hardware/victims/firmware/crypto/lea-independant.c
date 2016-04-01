@@ -43,7 +43,7 @@ void lea_indep_key(uint8_t * key)
 /* encrypting the data block */
 void lea_indep_enc(uint8_t * pt)
 {
-	lea128_enc(pt, &ctx);  /* pt : plain text */
+	lea128_enc(pt, &ctx); /* pt : plain text */
 }
 
 #elif defined(SIMPLElea)
