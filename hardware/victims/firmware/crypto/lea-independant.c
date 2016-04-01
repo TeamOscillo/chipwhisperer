@@ -106,5 +106,3 @@ void lea_indep_enc(uint8_t * pt)
 #error "No Crypto Lib Defined?"
 
 #endif
-
-
