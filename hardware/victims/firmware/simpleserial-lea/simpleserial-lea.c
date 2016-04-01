@@ -122,7 +122,7 @@ int main
 
 		if (c == 'k') {
 			ptr = 0;
-			state = KEY;			
+			state = KEY;
 			continue;
 		}
 
