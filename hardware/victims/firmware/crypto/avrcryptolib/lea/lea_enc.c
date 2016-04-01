@@ -1,20 +1,28 @@
 /* lea_enc.c */
 /*
- This file is part of the AVR-Crypto-Lib.
- Copyright TeamOscillo (qhdwls202@naver).
+	This file is part of the AVR-Crypto-Lib.
+	Copyright 2016 TeamOscillo (qhdwls202@naver).
  
- This program is free software: you can redistribute it and/or modify
- it under the terms of the GNU General Public License as published by
- the Free Software Foundation, either version 3 of the License, or
- (at your option) any later version.
+	This program is free software: you can redistribute it and/or modify
+	it under the terms of the GNU General Public License as published by
+	the Free Software Foundation, either version 3 of the License, or
+	(at your option) any later version.
+	
+	This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
 
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 /**
  * \file     lea_enc.c
  * \email    qhdwls202@naver.com
  * \author   TeamOscillo
  * \date     2016-03-14
- **/
+ * \license  GPLv3 or later
+ */
 
 #include <stdint.h>
 #include <string.h>
@@ -148,4 +156,3 @@ void lea_encrypt_core(lea_cipher_state_t* state, const LEA_KEY *key){
 	lea_enc_lastround(state, &(ks->key[i]));
 	*/
 }
-
