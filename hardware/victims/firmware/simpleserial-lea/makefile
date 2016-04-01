@@ -483,7 +483,7 @@ program: $(TARGET).hex $(TARGET).eep
 
 
 # Generate avr-gdb config/init file which does the following:
-#     define the reset signal, load the target file, connect to target, and set 
+#     define the reset signal, load the target file, connect to target, and set
 #     a breakpoint at main().
 gdb-config:
 	@$(REMOVE) $(GDBINIT_FILE)
