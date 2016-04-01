@@ -17,7 +17,7 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 /**
- * \file     lea128_enc.h
+ * \file     lea128_enc.c
  * \email    qhdwls202@naver.com
  * \author   TeamOscillo
  * \date     2016-03-14
